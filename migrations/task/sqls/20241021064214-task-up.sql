@@ -21,7 +21,7 @@ VALUES
     ('肌肉棒子','muscle@hexschooltest.io','USER'),
     ('好野人','richman@hexschooltest.io','USER'),
     ('Q太郎','starplatinum@hexschooltest.io','USER'),
-    ('透明人','opacity0@hexschooltest.io','USER');
+    ('透明人','opcatiy0@hexschooltest.io','USER');
 -- 1-2 修改：用 Email 找到 李燕容、肌肉棒子、Q太郎，如果他的 Role 為 USER 將他的 Role 改為 COACH
 UPDATE "USER"
 SET 
@@ -30,7 +30,7 @@ WHERE "email"='lee2000@hexschooltest.io' OR "email"='muscle@hexschooltest.io' OR
 -- 1-3 刪除：刪除USER 資料表中，用 Email 找到透明人，並刪除該筆資料
 DELETE FROM "USER"
 WHERE 
-	"email"='opacity0@hexschooltest.io';
+	"email"='opcatiy0@hexschooltest.io';
 -- 1-4 查詢：取得USER 資料表目前所有用戶數量（提示：使用count函式）
 SELECT COUNT(*) FROM "USER";
 -- 1-5 查詢：取得 USER 資料表所有用戶資料，並列出前 3 筆（提示：使用limit語法）
@@ -119,7 +119,26 @@ VALUES
     -- 1. 將用戶`李燕容`新增為教練，並且年資設定為2年（提示：使用`李燕容`的email ，取得 `李燕容` 的 `id` ）
     -- 2. 將用戶`肌肉棒子`新增為教練，並且年資設定為2年
     -- 3. 將用戶`Q太郎`新增為教練，並且年資設定為2年
-
+INSERT INTO "COACH" (
+  user_id,
+  experience_years
+)
+VALUES
+(
+	(SELECT "id" 
+	  FROM "USER" 
+		WHERE email='lee2000@hexschooltest.io'),2
+),-- 1. 將用戶`李燕容`新增為教練，並且年資設定為2年（提示：使用`李燕容`的email ，取得 `李燕容` 的 `id` ）
+(
+	(SELECT "id" 
+	  FROM "USER" 
+		WHERE email='muscle@hexschooltest.io'),2
+),-- 2. 將用戶`肌肉棒子`新增為教練，並且年資設定為2年
+(
+	(SELECT "id" 
+	  FROM "USER" 
+		WHERE email='starplatinum@hexschooltest.io'),2
+);-- 3. 將用戶`Q太郎`新增為教練，並且年資設定為2年
 
 
 -- 3-2. 新增：承1，為三名教練新增專長資料至 `COACH_LINK_SKILL` ，資料需求如下：
@@ -288,7 +307,7 @@ where "user_id"=(SELECT "id"
 -- 5-5. 修改：`王小明` 現在已經加入直播室了，請在`COURSE_BOOKING`更新該筆預約資料（請注意，不要更新到已經取消的紀錄）：
     -- 1. 請在該筆預約記錄他的加入直播室時間 `join_at` 設為2024-11-25 14:01:59
     -- 2. 狀態`status` 設定為上課中
-
+UPDATE "COURSE_BOOKING"
 SET 
 	"join_at"='2024-11-25 14:01:59',
 	"status"='上課中'
