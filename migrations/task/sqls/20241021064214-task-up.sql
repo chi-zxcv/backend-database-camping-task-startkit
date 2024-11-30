@@ -14,15 +14,27 @@
 --     4. 用戶名稱為`好野人`，Email 為`richman@hexschooltest.io`，Role為`USER`
 --     5. 用戶名稱為`Q太郎`，Email 為`starplatinum@hexschooltest.io`，Role為`USER`
 --     6. 用戶名稱為 透明人，Email 為 opacity0@hexschooltest.io，Role 為 USER
-
+INSERT INTO "USER" (name,email,role)
+VALUES
+    ('李燕容','lee2000@hexschooltest.io','USER'),
+    ('王小明','wXlTq@hexschooltest.io','USER'),
+    ('肌肉棒子','muscle@hexschooltest.io','USER'),
+    ('好野人','richman@hexschooltest.io','USER'),
+    ('Q太郎','starplatinum@hexschooltest.io','USER'),
+    ('透明人','opcatiy0@hexschooltest.io','USER');
 -- 1-2 修改：用 Email 找到 李燕容、肌肉棒子、Q太郎，如果他的 Role 為 USER 將他的 Role 改為 COACH
-
+UPDATE "USER"
+SET 
+	"role"='COACH'
+WHERE "email"='lee2000@hexschooltest.io' OR "email"='muscle@hexschooltest.io' OR "email"='starplatinum@hexschooltest.io'; 
 -- 1-3 刪除：刪除USER 資料表中，用 Email 找到透明人，並刪除該筆資料
-
+DELETE FROM "USER"
+WHERE 
+	"email"='opcatiy0@hexschooltest.io';
 -- 1-4 查詢：取得USER 資料表目前所有用戶數量（提示：使用count函式）
-
+SELECT COUNT(*) FROM "USER";
 -- 1-5 查詢：取得 USER 資料表所有用戶資料，並列出前 3 筆（提示：使用limit語法）
-
+SELECT * FROM "USER" LIMIT 3;
 
 --  ████████  █████   █    ████  
 --    █ █   ██    █  █         █ 
@@ -35,12 +47,66 @@
     -- 1. 名稱為 `7 堂組合包方案`，價格為`1,400` 元，堂數為`7`
     -- 2. 名稱為`14 堂組合包方案`，價格為`2,520` 元，堂數為`14`
     -- 3. 名稱為 `21 堂組合包方案`，價格為`4,800` 元，堂數為`21`
-
+INSERT INTO "CREDIT_PACKAGE" (name,credit_amount,price)
+VALUES
+    ('7 堂組合包方案',1400,7), --名稱為 7 堂組合包方案**，**價格為1,400 元，堂數為7
+    ('14 堂組合包方案',2520,14), --名稱為14 堂組合包方案**，**價格為2,520 元，堂數為14
+    ('21 堂組合包方案',4800,21); --名稱為 21 堂組合包方案，價格為4,800 元，堂數為21
 -- 2-2. 新增：在 `CREDIT_PURCHASE` 資料表，新增三筆資料：（請使用 name 欄位做子查詢）
     -- 1. `王小明` 購買 `14 堂組合包方案`
     -- 2. `王小明` 購買 `21 堂組合包方案`
     -- 3. `好野人` 購買 `14 堂組合包方案`
-
+INSERT INTO "CREDIT_PURCHASE" (
+  	user_id,
+    credit_package_id,
+    purchased_credits,
+    price_paid)
+VALUES
+    (
+      (SELECT "id" 
+       FROM "USER" 
+       WHERE name='王小明'),
+      (SELECT "id" 
+       FROM "CREDIT_PACKAGE" 
+       WHERE name='14 堂組合包方案'),
+      (SELECT "credit_amount" 
+       FROM "CREDIT_PACKAGE" 
+       WHERE name='14 堂組合包方案'),
+      (SELECT "price" 
+       FROM "CREDIT_PACKAGE" 
+       WHERE name='14 堂組合包方案')
+    ), -- 1. `王小明` 購買 `14 堂組合包方案`
+    (
+      (SELECT "id" 
+       FROM "USER" 
+       WHERE name='王小明'),
+      (SELECT "id" 
+       FROM "CREDIT_PACKAGE" 
+       WHERE name='21 堂組合包方案'),
+      (SELECT "credit_amount" 
+       FROM "CREDIT_PACKAGE" 
+       WHERE name='21 堂組合包方案'),
+      (SELECT "price" 
+       FROM "CREDIT_PACKAGE" 
+       WHERE name='21 堂組合包方案')
+    ),-- 2. `王小明` 購買 `21 堂組合包方案`
+    (
+      (SELECT "id" 
+       FROM "USER" 
+       WHERE name='好野人'),
+      (SELECT "id" 
+       FROM "CREDIT_PACKAGE" 
+       WHERE name='14 堂組合包方案'),
+      (SELECT "credit_amount" 
+       FROM "CREDIT_PACKAGE" 
+       WHERE name='14 堂組合包方案'),
+      (SELECT "price" 
+       FROM "CREDIT_PACKAGE" 
+       WHERE name='14 堂組合包方案')
+    );-- 3. `好野人` 購買 `14 堂組合包方案`
+    
+    
+    
 
 -- ████████  █████   █    ████   
 --   █ █   ██    █  █         ██ 
@@ -53,18 +119,59 @@
     -- 1. 將用戶`李燕容`新增為教練，並且年資設定為2年（提示：使用`李燕容`的email ，取得 `李燕容` 的 `id` ）
     -- 2. 將用戶`肌肉棒子`新增為教練，並且年資設定為2年
     -- 3. 將用戶`Q太郎`新增為教練，並且年資設定為2年
+INSERT INTO "COACH" (
+  user_id,
+  experience_years
+)
+VALUES
+(
+	(SELECT "id" 
+	  FROM "USER" 
+		WHERE email='lee2000@hexschooltest.io'),2
+),-- 1. 將用戶`李燕容`新增為教練，並且年資設定為2年（提示：使用`李燕容`的email ，取得 `李燕容` 的 `id` ）
+(
+	(SELECT "id" 
+	  FROM "USER" 
+		WHERE email='muscle@hexschooltest.io'),2
+),-- 2. 將用戶`肌肉棒子`新增為教練，並且年資設定為2年
+(
+	(SELECT "id" 
+	  FROM "USER" 
+		WHERE email='starplatinum@hexschooltest.io'),2
+);-- 3. 將用戶`Q太郎`新增為教練，並且年資設定為2年
+
 
 -- 3-2. 新增：承1，為三名教練新增專長資料至 `COACH_LINK_SKILL` ，資料需求如下：
     -- 1. 所有教練都有 `重訓` 專長
     -- 2. 教練`肌肉棒子` 需要有 `瑜伽` 專長
     -- 3. 教練`Q太郎` 需要有 `有氧運動` 與 `復健訓練` 專長
 
+--SELECT * FROM "USER" WHERE role='COACH';
+--get '李燕容' '肌肉棒子' 'Q太郎'
+
+
 -- 3-3 修改：更新教練的經驗年數，資料需求如下：
     -- 1. 教練`肌肉棒子` 的經驗年數為3年
     -- 2. 教練`Q太郎` 的經驗年數為5年
+UPDATE "COACH"
+SET experience_years=3
+WHERE 
+	user_id=(SELECT "id" 
+           FROM "USER" 
+           WHERE name='肌肉棒子');
+
+UPDATE "COACH"
+SET experience_years=5
+WHERE 
+	user_id=(SELECT "id" 
+           FROM "USER" 
+           WHERE name='Q太郎');
 
 -- 3-4 刪除：新增一個專長 空中瑜伽 至 SKILL 資料表，之後刪除此專長。
-
+INSERT INTO "SKILL" (name)
+VALUES('空中瑜伽');
+DELETE FROM "SKILL"
+WHERE "name" = '空中瑜伽';
 
 --  ████████  █████   █    █   █ 
 --    █ █   ██    █  █     █   █ 
@@ -82,6 +189,38 @@
     -- 5. 授課結束時間`end_at`設定為2024-11-25 16:00:00
     -- 6. 最大授課人數`max_participants` 設定為10
     -- 7. 授課連結設定`meeting_url`為 https://test-meeting.test.io
+
+insert into "COURSE" (
+  "user_id", --"USER"(id),
+  "skill_id", -- "SKILL"(id),
+  "name" ,
+  "start_at",
+  "end_at",
+  "max_participants",
+  "meeting_url"
+)
+values
+(
+	-- 1. 教練設定為用戶`李燕容` 
+	(SELECT "id" 
+       FROM "USER" 
+       WHERE name='李燕容'),
+       
+    -- 2. 在課程專長 `skill_id` 上設定為「 `重訓` 」
+    (select id 
+     from "SKILL"
+     where name='重訓'),
+    -- 3. 在課程名稱上，設定為「`重訓基礎課`」
+     '重訓基礎課',
+    -- 4. 授課開始時間`start_at`設定為2024-11-25 14:00:00
+    '2024-11-25 14:00:00',
+    -- 5. 授課結束時間`end_at`設定為2024-11-25 16:00:00
+    '2024-11-25 16:00:00',
+    -- 6. 最大授課人數`max_participants` 設定為10
+    10,
+    -- 7. 授課連結設定`meeting_url`為 https://test-meeting.test.io
+    'https://test-meeting.test.io'
+);
 
 
 -- ████████  █████   █    █████ 
@@ -102,20 +241,80 @@
         -- 2. 預約時間`booking_at` 設為2024-11-24 16:00:00
         -- 3. 狀態`status` 設定為即將授課
 
+insert into "COURSE_BOOKING"(
+  "user_id",--"USER"(id),
+  "course_id",--"COURSE"(id),
+  "booking_at",
+  "status"
+)
+values
+(
+	(SELECT "id" 
+       FROM "USER" 
+       WHERE name='王小明'), --預約人設為王小明
+    (select id from "COURSE" where name='重訓基礎課'),
+    '2024-11-24 16:00:00',--預約時間 booking_at 設為2024-11-24 16:00:00
+	'即將授課' --狀態 status 設定為即將授課
+),
+(
+	(SELECT "id" 
+       FROM "USER" 
+       WHERE name='好野人'), --預約人設為王小明
+    (select id from "COURSE" where name='重訓基礎課'),
+    '2024-11-24 16:00:00',--預約時間 booking_at 設為2024-11-24 16:00:00
+	'即將授課' --狀態 status 設定為即將授課
+);
+
 -- 5-2. 修改：`王小明`取消預約 `李燕容` 的課程，請在`COURSE_BOOKING`更新該筆預約資料：
     -- 1. 取消預約時間`cancelled_at` 設為2024-11-24 17:00:00
     -- 2. 狀態`status` 設定為課程已取消
-
+UPDATE "COURSE_BOOKING"
+SET 
+	"cancelled_at"='2024-11-24 17:00:00',
+	"status"='課程已取消'
+WHERE "user_id"=(SELECT "id" 
+       			 FROM "USER" 
+       			 WHERE name='王小明'); 
 -- 5-3. 新增：`王小明`再次預約 `李燕容`   的課程，請在`COURSE_BOOKING`新增一筆資料：
     -- 1. 預約人設為`王小明`
     -- 2. 預約時間`booking_at` 設為2024-11-24 17:10:25
     -- 3. 狀態`status` 設定為即將授課
-
+insert into "COURSE_BOOKING"(
+  "user_id",--"USER"(id),
+  "course_id",--"COURSE"(id),
+  "booking_at",
+  "status"
+)
+values
+(
+	(SELECT "id" 
+       FROM "USER" 
+       WHERE name='王小明'), --預約人設為王小明
+    (select id from "COURSE" where name='重訓基礎課'),
+    '2024-11-24 17:10:25',--預約時間 booking_at 設為2024-11-24 17:10:25
+	'即將授課' --狀態 status 設定為即將授課
+);
 -- 5-4. 查詢：取得王小明所有的預約紀錄，包含取消預約的紀錄
+
+select 
+	"booking_at" as "預約紀錄",
+	"cancelled_at" as "取消預約紀錄"
+from "COURSE_BOOKING"
+where "user_id"=(SELECT "id" 
+       FROM "USER" 
+       WHERE name='王小明');
 
 -- 5-5. 修改：`王小明` 現在已經加入直播室了，請在`COURSE_BOOKING`更新該筆預約資料（請注意，不要更新到已經取消的紀錄）：
     -- 1. 請在該筆預約記錄他的加入直播室時間 `join_at` 設為2024-11-25 14:01:59
     -- 2. 狀態`status` 設定為上課中
+
+SET 
+	"join_at"='2024-11-25 14:01:59',
+	"status"='上課中'
+WHERE "user_id"=(SELECT "id" 
+       			 FROM "USER" 
+       			 WHERE name='王小明')
+      and "status"='即將授課'; 
 
 -- 5-6. 查詢：計算用戶王小明的購買堂數，顯示須包含以下欄位： user_id , total。 (需使用到 SUM 函式與 Group By)
 
