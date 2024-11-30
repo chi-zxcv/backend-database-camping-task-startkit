@@ -47,7 +47,7 @@ SELECT * FROM "USER" LIMIT 3;
     -- 1. 名稱為 `7 堂組合包方案`，價格為`1,400` 元，堂數為`7`
     -- 2. 名稱為`14 堂組合包方案`，價格為`2,520` 元，堂數為`14`
     -- 3. 名稱為 `21 堂組合包方案`，價格為`4,800` 元，堂數為`21`
-INSERT INTO "CREDIT_PACKAGE" (name,credit_amount,price)
+INSERT INTO "CREDIT_PACKAGE" (name,price,credit_amount)
 VALUES
     ('7 堂組合包方案',1400,7), --名稱為 7 堂組合包方案**，**價格為1,400 元，堂數為7
     ('14 堂組合包方案',2520,14), --名稱為14 堂組合包方案**，**價格為2,520 元，堂數為14
@@ -398,7 +398,20 @@ GROUP BY "user_id";
     -- from ( 用戶王小明的購買堂數 ) as "CREDIT_PURCHASE"
     -- inner join ( 用戶王小明的已使用堂數) as "COURSE_BOOKING"
     -- on "COURSE_BOOKING".user_id = "CREDIT_PURCHASE".user_id;
-
+select 
+	(SUM("CREDIT_PURCHASE".purchased_credits) - COUNT("COURSE_BOOKING".user_id)) as remaining_credit
+from 
+	"CREDIT_PURCHASE"
+inner join 
+	"COURSE_BOOKING" on "COURSE_BOOKING".user_id = "CREDIT_PURCHASE".user_id
+where 
+	"COURSE_BOOKING".user_id=(
+		SELECT "id"
+		FROM "USER" 
+       	WHERE name='王小明')
+	and "COURSE_BOOKING".status not in ('課程已取消')
+GROUP BY 
+    "CREDIT_PURCHASE".user_id;
 
 -- ████████  █████   █     ███  
 --   █ █   ██    █  █     █     
