@@ -413,6 +413,7 @@ where
 GROUP BY 
     "CREDIT_PURCHASE".user_id;
 
+
 -- ████████  █████   █     ███  
 --   █ █   ██    █  █     █     
 --   █ █████ ███ ███      ████  
