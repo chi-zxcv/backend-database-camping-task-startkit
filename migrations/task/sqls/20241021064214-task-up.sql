@@ -464,5 +464,21 @@ group by "CREDIT_PACKAGE"."name";
 -- 6-4. 查詢：計算 11 月份總營收（使用 purchase_at 欄位統計）
 -- 顯示須包含以下欄位： 總營收
 
+		
+select 
+	SUM("銷售價格" * "銷售數量") as "總營收"
+from (
+	select 
+		"CREDIT_PACKAGE"."name" as "組合包方案名稱",
+		"CREDIT_PACKAGE".price as "銷售價格",
+		COUNT(*) as "銷售數量",
+		"CREDIT_PACKAGE".price * COUNT(*) as "總營收"
+	from 
+		"CREDIT_PACKAGE"
+	inner join 
+		"CREDIT_PURCHASE" on "CREDIT_PURCHASE".credit_package_id = "CREDIT_PACKAGE".id
+	group by "CREDIT_PACKAGE"."name",
+		 	 "CREDIT_PACKAGE".price
+) AS sales_summary;
 -- 6-5. 查詢：計算 11 月份有預約課程的會員人數（需使用 Distinct，並用 created_at 和 status 欄位統計）
 -- 顯示須包含以下欄位： 預約會員人數
