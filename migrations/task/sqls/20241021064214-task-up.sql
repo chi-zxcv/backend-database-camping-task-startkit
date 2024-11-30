@@ -145,7 +145,63 @@ VALUES
     -- 1. 所有教練都有 `重訓` 專長
     -- 2. 教練`肌肉棒子` 需要有 `瑜伽` 專長
     -- 3. 教練`Q太郎` 需要有 `有氧運動` 與 `復健訓練` 專長
-
+--select * from "COACH_LINK_SKILL";
+INSERT into "COACH_LINK_SKILL"("coach_id","skill_id")
+VALUES
+(
+	(select id 
+	 from "COACH" 
+	 where user_id = (SELECT id from "USER" where email='lee2000@hexschooltest.io')),
+	(select id 
+	 from "SKILL"
+	 where name='重訓'
+	)
+),
+(
+	(select id 
+	 from "COACH" 
+	 where user_id = (SELECT id from "USER" where email='muscle@hexschooltest.io')),
+	(select id 
+	 from "SKILL"
+	 where name='重訓'
+	)
+),
+(
+	(select id 
+	 from "COACH" 
+	 where user_id = (SELECT id from "USER" where email='starplatinum@hexschooltest.io')),
+	(select id 
+	 from "SKILL"
+	 where name='重訓'
+	)
+),
+(
+	(select id 
+	 from "COACH" 
+	 where user_id = (SELECT id from "USER" where email='muscle@hexschooltest.io')),
+	(select id 
+	 from "SKILL"
+	 where name='瑜伽'
+	)
+),
+(
+	(select id 
+	 from "COACH" 
+	 where user_id = (SELECT id from "USER" where email='starplatinum@hexschooltest.io')),
+	(select id 
+	 from "SKILL"
+	 where name='有氧運動'
+	)
+),
+(
+	(select id 
+	 from "COACH" 
+	 where user_id = (SELECT id from "USER" where email='starplatinum@hexschooltest.io')),
+	(select id 
+	 from "SKILL"
+	 where name='復健訓練'
+	)
+);
 --SELECT * FROM "USER" WHERE role='COACH';
 --get '李燕容' '肌肉棒子' 'Q太郎'
 
