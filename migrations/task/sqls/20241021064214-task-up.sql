@@ -398,7 +398,8 @@ GROUP BY "user_id";
     -- from ( 用戶王小明的購買堂數 ) as "CREDIT_PURCHASE"
     -- inner join ( 用戶王小明的已使用堂數) as "COURSE_BOOKING"
     -- on "COURSE_BOOKING".user_id = "CREDIT_PURCHASE".user_id;
-select 
+select
+    "CREDIT_PURCHASE".user_id,
 	(SUM("CREDIT_PURCHASE".purchased_credits) - COUNT("COURSE_BOOKING".user_id)) as remaining_credit
 from 
 	"CREDIT_PURCHASE"
@@ -436,7 +437,9 @@ inner join
 inner join 
 	"SKILL" on "COACH_LINK_SKILL".skill_id = "SKILL".id
 where 
-	"SKILL"."name" ='重訓';
+	"SKILL"."name" ='重訓'
+order by 
+	"COACH".experience_years desc;
 -- 6-2 查詢：查詢每種專長的教練數量，並只列出教練數量最多的專長（需使用 group by, inner join 與 order by 與 limit 語法）
 -- 顯示須包含以下欄位： 專長名稱, coach_total
 
@@ -492,4 +495,4 @@ from
 where 
 	"COURSE_BOOKING".status in ('即將授課','上課中')
 and 
-	EXTRACT(MONTH FROM "booking_at")=11;
+	EXTRACT(MONTH FROM "created_at")=11;
